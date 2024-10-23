@@ -95,17 +95,20 @@ if __name__ == '__main__':
     else:
         config = defaultdict()
         # arguments for dataloader
-        config['data'] = {'xDataFile': 'data/data.pkl',
-                          'flowFile': 'data/streamflow.csv',
-                          'laiFile': 'data/LAI.csv',
+        config['data'] = {'xDataFile': 'data/data.pkl',   # input file containing forcing data and static attributes
+                          'flowFile': 'data/streamflow.csv',  # streamflow file
+                          'laiFile': 'data/LAI.csv',  # LAI file
+                          # Training, validation, and testing periods
                           'periods': [['1981-1-1', '1994-12-31'], ['1995-1-1', '2004-12-31'],
                                       ['2005-1-1', '2019-12-31']],
                           # 'periods': [['1960-1-1', '1994-12-31'], ['1995-1-1', '2004-12-31'],
                           #             ['2005-1-1', '2019-12-31']],
-                          'hydStations': ['MAQ'],
-                          'excludeBsnAttrVar': 'slope_min',
-                          'spinUp': [365, 365, 365],
+                          'hydStations': ['MAQ'],  # which hydrological stations are used for training
+                          'excludeBsnAttrVar': 'slope_min',  # exclude some static attributes
+                          'spinUp': [365, 365, 365],  # spin-up period for training, validation, and testing
+                          # sequence length, window size, mainstream index and padding values in the routing order array
                           'seqLen': 1460, 'winSz': 1460, 'mainIdx': 0, 'pad': 9999,
+                          # sub-basin id for each hydrological station
                           'hydStationBsnIdx': {'HHY': 13, 'JIM': 45, 'MET': 53, 'MAQ': 35, 'JUG': 23, 'TNH': 0}}
 
         # hyperparameters for training
@@ -114,6 +117,10 @@ if __name__ == '__main__':
         outBsnIdx = [config['data']['hydStationBsnIdx'][bsn] for bsn in config['data']['hydStations']]
         # get five random seeds using (np.random.uniform(low=0, high=1, size=6) * (10**6)).astype(int)
         # [668823, 759826, 211765, 908331, 808530, 178716]
+        # cal_gs_LAI means whether to calculate LAI loss based on the growing season
+        # snow_NN means whether to use NNs to learn the parameter of snow sublimation
+        # nMul means number of multi-components in Feng et al., 2022,
+        # wMul means whether the weight of the multi-components is automatically learnt by NNs
         config['train'] = {'logLoss': False, 'wLog': 0.25, 'wStationLoss': {'TNH': 1, 'MAQ': 1, 'JIM': 1, 'HHY': 0.5},
                            'wLAI': 0.5, 'patience': 20, 'lr': 0.005, 'clip': 3, 'epochs': 200, 'gpu': True,
                            'seed': 759826, 'outBsnIdx': outBsnIdx, 'dropout': 0.5, 'activFn': 'sigmoid',
@@ -207,4 +214,4 @@ if __name__ == '__main__':
     saveSimulation(model=model, loaderVal=loader.loaderVal, loaderTst=loader.loaderTst, outPath='simulation.pkl',
                    config=config, obsLAI=loader.LAI, cal_gs_LAI=config['train']['cal_gs_LAI'], model_type=model_type)
 
-    os._exit(0)
+    # os._exit(0)
