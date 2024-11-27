@@ -13,10 +13,12 @@ If you have any questions or suggestions with the code or find a bug, please let
 
 The code was built on Pytorch. To use this code, please do:
 
-1. Install the dependencies use the following command:
+1. Install the dependencies in the requirement.txt using conda:
 
-   ```none
-   pip install -r requirements.txt
+   ```shell
+   conda install python=3.7.0 -y
+   conda install pytorch==1.12.1 torchaudio==0.12.1 torchvision==0.13.1 cudatoolkit=11.6 -c pytorch -c conda-forge -y
+   conda install matplotlib==3.5.2 numpy==1.21.5 pandas==1.3.5 seaborn==0.12.2 statsmodels==0.13.5 -c conda-forge -y
    ```
 
 2. Prepare your dataset 
