@@ -858,7 +858,7 @@ class ExpBGMCell(nn.Module):
         # forcing
         forcing = forcing.unsqueeze(1).repeat(1, self.nMul, 1)  # [N, F] to [N, nMul, F)
         P, T, Ep = forcing[:, :, 0], forcing[:, :, 1], forcing[:, :, 2]
-        self.antT = torch.cat((self.antT[:, :, -(len(self.antT) - 1):].clone(), T.unsqueeze(-1)), dim=-1)
+        self.antT = torch.cat((self.antT[:, :, -(self.antT.size(-1) - 1):].clone(), T.unsqueeze(-1)), dim=-1)
 
         # initiate the storages
         Sw0, Si0, Ssl0, Sss0, Bg0 = S0[:, :, 0], S0[:, :, 1], S0[:, :, 2], S0[:, :, 3], S0[:, :, 4]
@@ -1191,7 +1191,7 @@ class ExpHYDROCell(nn.Module):
         # forcing
         forcing = forcing.unsqueeze(1).repeat(1, self.nMul, 1)  # [N, F] to [N, nMul, F)
         P, T, Ep = forcing[:, :, 0], forcing[:, :, 1], forcing[:, :, 2]
-        self.antT = torch.cat((self.antT[:, :, -(len(self.antT) - 1):].clone(), T.unsqueeze(-1)), dim=-1)
+        self.antT = torch.cat((self.antT[:, :, -(self.antT.size(-1) - 1):].clone(), T.unsqueeze(-1)), dim=-1)
 
         # initiate the storages
         Sw0, Si0, Ssl0, Sss0 = S0[:, :, 0], S0[:, :, 1], S0[:, :, 2], S0[:, :, 3]
